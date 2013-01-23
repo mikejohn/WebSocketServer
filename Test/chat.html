@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <!-- import jquery-->
+    <script src="./../Library/jquery/js/jquery-1.9.0.js"></script>
+    <script src="./../Library/jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <link href="./../Library/jquery/css/trontastic/jquery-ui-1.10.0.custom.min.css" rel="stylesheet" type="text/css"/>
+    <!-- import bootstrap-->
+    <link href="./../Library/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script src="./../Extensions/chat/client.js"></script>
+    <script src="./../Extensions/chat/protocol.js"></script>
+    <link href="../Extensions/chat/chatClient.css" rel="stylesheet" type="text/css">
+</head>
+<script>
+    $(function() {
+        var client = new ChatClient();
+        client.buildUp();
+        client.connect();
+        function send () {
+            var b = client.protocolHandler.sendOnline();
+            client.ws.send(b);
+        }
+        var b = document.getElementById('send');
+        b.onclick = send;
+    });
+</script>
+<body>
+    <button id="send">Send</button>
+</body>
+</html>

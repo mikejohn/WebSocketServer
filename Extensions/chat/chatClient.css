@@ -1,0 +1,10 @@
+div#chat_plane div#online_board ol li.ui-selected { background: #F39814; color: white; }
+div#chat_plane {
+    width:800px;
+    height: 400px;
+}
+div#chat_plane div#online_board {
+    float: right;
+    width:100px;
+    height:300px;
+}

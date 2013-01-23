@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script>
+        function init() {
+            Uint8Array.prototype.readUInt16BE = function (offset) {
+                var B = this[offset];
+                var L = this[offset+1];
+                return (B << 8)+L;
+            };
+            var a = new Uint8Array(3);
+            a[0] = 2;
+            a[1] = 1;
+            a[2] = 2;
+            var b = a.readUInt16BE(0);
+            console.dir(b);
+            var ws;
+            try {
+                ws = new WebSocket('ws://192.168.0.4:4001');
+            } catch (ex) {
+                console.dir(ex);
+                return;
+            }
+            ws.onopen = function () {
+                console.log('Connection success!');
+            };
+            ws.onmessage = function (socket) {
+                var c = socket.data;
+                var reader = new FileReader();
+                reader.onloadend = function(){
+                    console.dir(new Uint8Array(reader.result));
+                };
+                reader.readAsArrayBuffer(c);
+
+            };
+            ws.onclose = function (close) {
+                console.dir(close);
+                console.log("Connection close");
+            };
+            ws.onerror = function (error) {
+                console.dir(error);
+            };
+            function send () {
+                var info = document.getElementById('info').value;
+                ws.send(info);
+            }
+            var b = document.getElementById('send');
+            b.onclick = send;
+        }
+
+    </script>
+</head>
+<body onload="init();">
+    <input id="info" type="text"/><button id="send">Send</button>
+</body>
+</html>
