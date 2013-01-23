@@ -6,6 +6,7 @@ var Log = function (fileFullPath) {
 Log.prototype = {
     init : function () {
         var that = this;
+        //使用绝对路径
         this.fs.open('./../Test/test.txt', 'a', function opened(err, fd) {
             console.log('open');
             console.dir(err);
