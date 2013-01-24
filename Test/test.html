@@ -4,6 +4,7 @@
     <title></title>
     <script>
         function init() {
+            console.log(255 >> 5);
             Uint8Array.prototype.readUInt16BE = function (offset) {
                 var B = this[offset];
                 var L = this[offset+1];

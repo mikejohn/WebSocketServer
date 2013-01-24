@@ -1,1 +1,1 @@
-123123
+This is an UTF-8 stringThis is an UTF-8 string

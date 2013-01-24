@@ -4,6 +4,7 @@ var ChatClient = function () {
 };
 ChatClient.prototype = {
     connect : function () {
+        var that = this;
         try {
             this.ws = new WebSocket('ws://192.168.0.4:4001');
         } catch (ex) {
@@ -12,6 +13,7 @@ ChatClient.prototype = {
         }
         this.ws.onopen = function () {
             console.log('Connection success!');
+            that.ws.send(that.protocolHandler.playerSignIn());
         };
         this.ws.onmessage = function (socket) {
             console.dir(socket);

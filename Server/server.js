@@ -2,6 +2,8 @@ var undefined = null;
 var ClientHandShake = require('./../Objects/ClientHandShake');
 var ServerHandShake = require('./../Objects/ServerHandShake');
 var Frame = require('./../Objects/Frame');
+var ChatServer = require('./../Extensions/chat/server.js');
+var cs = new ChatServer();
 var server = require('net').createServer();
 var port = 4001;
 server.on('listening', function() {
@@ -21,21 +23,9 @@ server.on('connection', function(socket) {
         socket.write(serverHS.encode());
         socket.removeListener('data',handshake);
         socket.on('data',function recive(data){
-            var p = new Frame();
-            p.decode(data);
-            console.log(p.PAYLOAD.toString());
-            var r = new Frame();
-            r.FIN = 1;
-            r.RSV1 = 0;
-            r.RSV2 = 0;
-            r.RSV3 = 0;
-            r.OPCODE = Frame.OPCODE_BINARY;
-            r.MASK = 0;
-            r.PAYLOAD_LEN = 1;
-            r.PAYLOAD = new Buffer(1);
-            r.PAYLOAD[0] = 65;
-            var frame = r.encode();
-            socket.write(frame);
+            var f = new Frame();
+            f.decode(data);
+            cs.listen(socket,f.PAYLOAD);
         });
         //console.log(serverHS.toString());
     });
