@@ -8,17 +8,24 @@ var Chat_Protocol = {
 var ChatServer = function () {
     this.clients = [];
     this.onlineClientNum = 0;
-    this.client_id = 1;
+    this.client_id = 0;
 };
 ChatServer.prototype = {
     listen : function (socket,appData) {
         var client = null;
         if(socket.client_id === undefined) {
-            this.client_id++;
             socket.client_id = this.client_id;
             client = new ChatServer.Client(this.client_id,socket);
-            this.clients.push(client);
+            this.clients[this.client_id] =client;
+            this.client_id++;
             this.onlineClientNum++;
+            var that = this;
+            socket.on('close',function () {
+                that.clientLogOut(client);
+            });
+            socket.on('error',function(){
+                that.clientLogOut(client);
+            });
         } else {
             client = this.clients[socket.client_id];
         }
@@ -47,7 +54,6 @@ ChatServer.prototype = {
         }
     },
     clientSignIn : function (client) {
-
         //广播当前登录客户端
         var signIn_info = ChatServer.MessageFormat.Single_Unmask();
         signIn_info.PAYLOAD = new Buffer(6);
@@ -61,8 +67,8 @@ ChatServer.prototype = {
         //向登录用户发送当前所有在线用户
         var poz = 4;
         var online_client_info = ChatServer.MessageFormat.Single_Unmask();
-        online_client_info.PAYLOAD_LEN = this.onlineClientNum*2+4;
-        online_client_info.PAYLOAD = new Buffer(this.onlineClientNum*2+4);
+        online_client_info.PAYLOAD_LEN = (this.onlineClientNum-1)*2+4;
+        online_client_info.PAYLOAD = new Buffer(online_client_info.PAYLOAD_LEN);
         online_client_info.PAYLOAD[0] = 128;
         online_client_info.PAYLOAD[1] = 0;
         online_client_info.PAYLOAD.writeUInt16BE(this.onlineClientNum-1,2);
@@ -70,17 +76,37 @@ ChatServer.prototype = {
         var clients = this.clients,c = null;
         for(var i=0;i<clients.length;i++) {
             c = clients[i];
-            if(c.status === ChatServer.Online) {
+            if(c.status === ChatServer.Client.Online && c.id != client.id) {
                 c.socket.write(reply);
                 online_client_info.PAYLOAD.writeUInt16BE(c.id,poz);
                 poz+=2;
             }
         }
-        reply = online_client_info.encode();
-        client.socket.write(reply);
+        if(poz > 4) {
+            reply = online_client_info.encode();
+            client.socket.write(reply);
+        }
     },
-    clientLogOut : function (clientID) {
-        //广播当前推出客户端
+    clientLogOut : function (client) {
+        client.status = ChatServer.Client.Offline;
+        this.onlineClientNum--;
+        //广播当前退出客户端
+        var offline_info = ChatServer.MessageFormat.Single_Unmask();
+        offline_info.PAYLOAD = new Buffer(6);
+        offline_info.PAYLOAD[0] = 64;
+        offline_info.PAYLOAD[1] = 0;
+        offline_info.PAYLOAD[2] = 0;
+        offline_info.PAYLOAD[3] = 1;
+        offline_info.PAYLOAD.writeUInt16BE(client.id,4);
+        offline_info.PAYLOAD_LEN = 6;
+        var reply = offline_info.encode();
+        var clients = this.clients,c = null;
+        for(var i=0;i<clients.length;i++) {
+            c = clients[i];
+            if(c.status === ChatServer.Client.Online && c.id != client.id) {
+                c.socket.write(reply);
+            }
+        }
     }
 };
 ChatServer.MessageFormat = {
@@ -98,14 +124,14 @@ ChatServer.MessageFormat = {
 ChatServer.Client = function (id,socket) {
     this.id = id;
     this.socket = socket;
-    this.status = ChatServer.Client.HandShake;
+    this.status = ChatServer.Client.Online;
 };
 ChatServer.Client.prototype = {
 
 };
 
-ChatServer.Client.HandShake = 0;
-ChatServer.Client.SignIn = 1;
-ChatServer.Client.Online = 2;
-ChatServer.Client.LogOut = 3;
+
+
+ChatServer.Client.Online = 0;
+ChatServer.Client.Offline = 3;
 module.exports = ChatServer;

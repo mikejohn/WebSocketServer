@@ -18,8 +18,7 @@
         client.buildUp();
         client.connect();
         function send () {
-            var b = client.protocolHandler.sendOnline();
-            client.ws.send(b);
+           client.clientLogOut();
         }
         var b = document.getElementById('send');
         b.onclick = send;
