@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Client UI</title>
+    <style>
+        div#warpper {
+            position: absolute;
+            left:200px;
+            top: 20px;
+            width: 800px;
+        }
+        div#input {
+            width: 606px;
+            height : 96px;
+            top: 302px;
+            position: absolute;
+            border-radius: 6px;
+        }
+        div#channelList {
+            float: left;
+            width: 600px;
+            height: 292px;
+        }
+
+        div#clientList {
+            float: right;
+            width: 189px;
+            height: 398px;
+        }
+
+        div#clientList ul {
+            padding-top: 20px;
+            padding-left: 20px;
+            width: 167px;
+            height: 378px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        div#clientList ul li {
+            width: 110px;
+            height: 25px;
+        }
+        button#send{
+            margin-left: 17px;
+        }
+        textarea#input {
+            width: 500px;
+            padding-top: 10px;
+        }
+        div#window {
+            width:800px;
+            height:20px;
+            border-radius: 6px;
+            background-color: #599FDF;
+        }
+    </style>
+    <!-- import jquery-->
+    <script src="./../Library/jquery/js/jquery-1.9.0.js"></script>
+    <script src="./../Library/jquery/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <link href="./../Library/jquery/css/trontastic/jquery-ui-1.10.0.custom.min.css" rel="stylesheet" type="text/css"/>
+    <!-- import bootstrap-->
+    <link href="./../Library/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script src="./../Extensions/chat/client.js"></script>
+    <script src="./../Extensions/chat/protocol.js"></script>
+    <link href="../Extensions/chat/chatClient.css" rel="stylesheet" type="text/css">
+</head>
+<script>
+    $(document).ready(function () {
+        $('#channelList').tabs();
+    });
+</script>
+<body>
+<div id="warpper">
+    <div id="window">
+
+    </div>
+    <div id="channelList">
+        <ul>
+            <li><a href="#channelList-1">Nunc tincidunt</a></li>
+            <li><a href="#channelList-2">Proin dolor</a></li>
+            <li><a href="#channelList-3">Aenean lacinia</a></li>
+        </ul>
+        <div id="channelList-1">
+            Proin elit arcu, rutrum commodo, vehicula tempus, commodo a, risus. Curabitur nec arcu. Donec sollicitudin
+            mi sit amet mauris. Nam elementum quam ullamcorper ante. Etiam aliquet massa et lorem. Mauris dapibus lacus
+            auctor risus. Aenean tempor ullamcorper leo. Vivamus sed magna quis ligula eleifend adipiscing. Duis orci.
+            Aliquam sodales tortor vitae ipsum. Aliquam nulla. Duis aliquam molestie erat. Ut et mauris vel pede varius
+            sollicitudin. Sed ut dolor nec orci tincidunt interdum. Phasellus ipsum. Nunc tristique tempus lectus.
+        </div>
+        <div id="channelList-2">
+            <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id
+                nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie
+                lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula
+                suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur
+                ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque
+                convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare
+                leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+        </div>
+        <div id="channelList-3">
+            <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula
+                accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent
+                taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu
+                urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem
+                enim, pretium nec, feugiat nec, luctus a, lacus.</p>
+
+            <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla
+                facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti.
+                Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio.
+                Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat
+                porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas
+                commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+        </div>
+    </div>
+    <div id="input" class="ui-widget-content">
+        <textarea id="input" rows="4" ></textarea><button id="send" class="btn btn-info">Send</button>
+    </div>
+    <div id="clientList" class="ui-widget ui-widget-content ui-corner-all">
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>7</li>
+            <li>8</li>
+            <li>9</li>
+            <li>10</li>
+            <li>11</li>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+            <li>6</li>
+            <li>7</li>
+            <li>8</li>
+            <li>9</li>
+            <li>10</li>
+            <li>11</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
